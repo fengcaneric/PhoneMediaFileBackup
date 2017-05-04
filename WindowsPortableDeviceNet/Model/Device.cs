@@ -4,7 +4,7 @@ using WindowsPortableDeviceNet.Model.Properties;
 using WindowsPortableDeviceNet.Model.Properties.Device;
 using IPortableDeviceValues = PortableDeviceApiLib.IPortableDeviceValues;
 
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace WindowsPortableDeviceNet.Model
 {

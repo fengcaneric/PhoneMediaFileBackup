@@ -42,7 +42,7 @@ namespace WindowsPortableDeviceNet.Model
                 case WindowsPortableDeviceEnumerators.ContentType.FunctionalObject:
                     {
                         //TODO: Replace it back to LoadDeviceItems if not correct
-                        LoadDeviceItemsThread(content);
+                        LoadDeviceItemsByThread(content);
                         break;
                     }
 
@@ -63,7 +63,8 @@ namespace WindowsPortableDeviceNet.Model
             }
         }
 
-        private void LoadDeviceItemsThread(IPortableDeviceContent content)
+        #region Load items by thread
+        private void LoadDeviceItemsByThread(IPortableDeviceContent content)
         {
             // Enumerate the items contained by the current object
             IEnumPortableDeviceObjectIDs objectIds;
@@ -91,14 +92,14 @@ namespace WindowsPortableDeviceNet.Model
                     }
                     Console.WriteLine("Start Task:" + fCount);
                     int fNumber = fCount;
-                    Task t = new Task(() => getItemsInTask(objectId, content, fNumber));
+                    Task t = new Task(() => getItemsByThread(objectId, content, fNumber));
                     t.Start();
                     tList.Add(t);
                 }
             }
         }
 
-        private void getItemsInTask(string objectId, IPortableDeviceContent content, int fNumber)
+        private void getItemsByThread(string objectId, IPortableDeviceContent content, int fNumber)
         {
             DateTime startTime = DateTime.Now;
 
@@ -116,6 +117,11 @@ namespace WindowsPortableDeviceNet.Model
 
             Console.WriteLine("Folder:" + fNumber + "--" + (DateTime.Now - startTime).TotalMilliseconds + " -- Task Count: " + tList.Count);
 
+            removeCurrentTask();
+        }
+
+        private void removeCurrentTask()
+        {
             Task currentTask = tList.Find(tl => tl.Id == Task.CurrentId);
             if (currentTask != null)
             {
@@ -125,7 +131,9 @@ namespace WindowsPortableDeviceNet.Model
                 }
             }
         }
+        #endregion
 
+        #region Transfer files
         public void TransferFiles(string destinationPath, bool isKeepFolderStructure)
         {
             switch (ContentType.Type)
@@ -153,14 +161,15 @@ namespace WindowsPortableDeviceNet.Model
                 case WindowsPortableDeviceEnumerators.ContentType.Video:
                 case WindowsPortableDeviceEnumerators.ContentType.Audio:
                     {
+                        Console.WriteLine("Start Task: copy " + OriginalFileName.Value);
                         TransferFile(destinationPath);
                 }
                 break;
             }
         }
 
+        //Share buffer, not assign and release every time.
         static byte[] buffer = new byte[array_length];
-
         /// <summary>
         /// This method copies the file from the device to the destination path.
         /// </summary>
@@ -226,5 +235,6 @@ namespace WindowsPortableDeviceNet.Model
                 }
             }
         }
+        #endregion
     }
 }

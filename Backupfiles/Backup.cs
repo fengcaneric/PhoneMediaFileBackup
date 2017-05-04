@@ -66,7 +66,7 @@ namespace Backupfiles
             DateTime startTime = DateTime.Now;
             Utility ut = new Utility();
             List<Device> connectedPortableDevices = ut.Get(false);
-            Console.WriteLine((DateTime.Now - startTime).TotalMilliseconds);
+            Console.WriteLine("Time to get devices without items -- " + (DateTime.Now - startTime).TotalMilliseconds);
 
             
             bindMTPListInThread(connectedPortableDevices);
@@ -111,6 +111,7 @@ namespace Backupfiles
             }
 
             string selectValue = cmbDriverList.SelectedValue.ToString();
+            btnCopy.Enabled = false;
 
             Task.Factory.StartNew(() =>
             {
@@ -118,11 +119,6 @@ namespace Backupfiles
                 Device selectedPD = null;
 
                 selectedPD = ut.GetDevice(selectValue);
-
-                btnCopy.BeginInvoke(new MethodInvoker(delegate {
-                    btnCopy.Enabled = false;
-                }));
-
                 GC.Collect();
                 GC.WaitForFullGCComplete();
 
@@ -138,8 +134,7 @@ namespace Backupfiles
                     Console.WriteLine(e.StackTrace);
                 }
                 Console.WriteLine("Copy is done -- " + (DateTime.Now - startTime).TotalMilliseconds);
-                GC.Collect();
-                GC.WaitForFullGCComplete();
+
                 btnCopy.BeginInvoke(new MethodInvoker(delegate {
                     btnCopy.Enabled = true;
                 }));
