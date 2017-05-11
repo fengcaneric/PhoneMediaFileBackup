@@ -17,6 +17,9 @@ namespace WindowsPortableDeviceNet.Model
         private IPortableDeviceContent DeviceContent { get; set; }
 
         static int array_length = (int)Math.Pow(2, 19);
+        const int MAX_THREAD_COUNT = 1;
+        public static int RootItemCount = 0;
+        public static int LoadedItemCount = 0;
 
         public Item(string objectId, IPortableDeviceContent content)
             : base(objectId)
@@ -63,12 +66,36 @@ namespace WindowsPortableDeviceNet.Model
             }
         }
 
+        private static void GetItemCount(string parentID, IPortableDeviceContent content)
+        {
+            IEnumPortableDeviceObjectIDs objectIds;
+            content.EnumObjects(0, parentID, null, out objectIds);
+            uint fe = 9999;
+            string ob;
+
+            RootItemCount = 0;
+            for (; fe > 0;)
+            {
+                fe = 9999;
+                objectIds.Next(1, out ob, ref fe);
+                RootItemCount++;
+            }
+            RootItemCount--;
+
+        }
+
         #region Load items by thread
         private void LoadDeviceItemsByThread(IPortableDeviceContent content)
         {
             // Enumerate the items contained by the current object
             IEnumPortableDeviceObjectIDs objectIds;
             content.EnumObjects(0, Id, null, out objectIds);
+
+            //Get total item count, it is for progress.
+            GetItemCount(Id, content);
+
+            LoadedItemCount = 0;
+            LoadedImageCount = 0;
 
             // Cycle through each device item and add it to the device items list.
             int fCount = 0;
@@ -85,21 +112,21 @@ namespace WindowsPortableDeviceNet.Model
                 {
                     fCount++;
                     Console.WriteLine("Folder count: " + fCount);
-                    while(tList.Count >= 70)
+                    while(tList.Count >= MAX_THREAD_COUNT)
                     {
                         Thread.Sleep(200);
                         Console.WriteLine("Sleep -- fCount is " + fCount);
                     }
                     Console.WriteLine("Start Task:" + fCount);
                     int fNumber = fCount;
-                    Task t = new Task(() => getItemsByThread(objectId, content, fNumber));
+                    Task t = new Task(() => GetItemsByThread(objectId, content, fNumber));
                     t.Start();
                     tList.Add(t);
                 }
             }
         }
 
-        private void getItemsByThread(string objectId, IPortableDeviceContent content, int fNumber)
+        private void GetItemsByThread(string objectId, IPortableDeviceContent content, int fNumber)
         {
             DateTime startTime = DateTime.Now;
 
@@ -115,12 +142,13 @@ namespace WindowsPortableDeviceNet.Model
                 DeviceItems.Add(i);
             }
 
-            Console.WriteLine("Folder:" + fNumber + "--" + (DateTime.Now - startTime).TotalMilliseconds + " -- Task Count: " + tList.Count);
+            RemoveCurrentTask();
 
-            removeCurrentTask();
+            LoadedItemCount++;
+            Console.WriteLine("Folder:" + fNumber + " " + i.Name.Value +" -- " + (DateTime.Now - startTime).TotalMilliseconds + " -- Task Count: " + tList.Count);
         }
 
-        private void removeCurrentTask()
+        private void RemoveCurrentTask()
         {
             Task currentTask = tList.Find(tl => tl.Id == Task.CurrentId);
             if (currentTask != null)
@@ -163,8 +191,10 @@ namespace WindowsPortableDeviceNet.Model
                     {
                         Console.WriteLine("Start Task: copy " + OriginalFileName.Value);
                         TransferFile(destinationPath);
-                }
-                break;
+                        CopiedImageCount++;
+                        Console.WriteLine("Copy files " + CopiedImageCount);
+                    }
+                    break;
             }
         }
 

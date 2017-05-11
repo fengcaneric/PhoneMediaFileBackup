@@ -94,6 +94,7 @@ namespace WindowsPortableDeviceNet.Model
         /// <param name="isKeepFolderStructure"></param>
         public void TransferData(string destinationPath, bool isKeepFolderStructure)
         {
+            CopiedImageCount = 0;
             try
             {
                 Connect();

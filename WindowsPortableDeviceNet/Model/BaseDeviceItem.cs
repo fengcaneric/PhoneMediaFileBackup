@@ -9,6 +9,9 @@ namespace WindowsPortableDeviceNet.Model
 {
     public class BaseDeviceItem
     {
+        public static int LoadedImageCount = 0;
+        public static int CopiedImageCount = 0;
+
         public string Id { get; protected set; }
         public List<Item> DeviceItems { get; private set; }
 
@@ -55,6 +58,13 @@ namespace WindowsPortableDeviceNet.Model
                         i.ContentType.Type == WindowsPortableDeviceEnumerators.ContentType.Image)
                     {
                         DeviceItems.Add(i);
+                    }
+
+                    if (i.ContentType.Type == WindowsPortableDeviceEnumerators.ContentType.Audio ||
+                        i.ContentType.Type == WindowsPortableDeviceEnumerators.ContentType.Video ||
+                        i.ContentType.Type == WindowsPortableDeviceEnumerators.ContentType.Image)
+                    {
+                        LoadedImageCount++;
                     }
                 }
             } 

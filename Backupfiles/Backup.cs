@@ -24,6 +24,7 @@ namespace Backupfiles
         private void Backup_Load(object sender, EventArgs e)
         {
             this.bindMTPList();
+            this.txtSavePath.Text = this.fbdPath.SelectedPath;
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
@@ -38,7 +39,13 @@ namespace Backupfiles
             //pcfd.copyAllPhotosByThread(drive);
 
             //copyAllMTPPhotos();
-            copyALLMediaFiles(@"E:\test");
+            copyALLMediaFiles(this.txtSavePath.Text);
+        }
+
+        private void txtSavePath_Click(object sender, EventArgs e)
+        {
+            this.fbdPath.ShowDialog();
+            this.txtSavePath.Text = this.fbdPath.SelectedPath;
         }
         #endregion
 
@@ -112,20 +119,31 @@ namespace Backupfiles
 
             string selectValue = cmbDriverList.SelectedValue.ToString();
             btnCopy.Enabled = false;
+            btnCopy.Visible = false;
+
+            prbLoadNCopy.Value = 0;
+            prbLoadNCopy.Visible = true;
+            lblProgress.Visible = true;
 
             Task.Factory.StartNew(() =>
             {
                 Utility ut = new Utility();
                 Device selectedPD = null;
 
+                DateTime startTime = DateTime.Now;
                 selectedPD = ut.GetDevice(selectValue);
+                Console.WriteLine("Load items time -- " + (DateTime.Now - startTime).TotalMilliseconds);
                 GC.Collect();
                 GC.WaitForFullGCComplete();
 
-                DateTime startTime = DateTime.Now;
+                DateTime cstartTime = DateTime.Now;
                 try
                 {
                     Console.WriteLine("Copy start");
+                    if (!Directory.Exists(destinationPath))
+                    {
+                        Directory.CreateDirectory(destinationPath);
+                    }
                     selectedPD.TransferData(destinationPath, false);
                 }
                 catch (Exception e)
@@ -133,12 +151,44 @@ namespace Backupfiles
                     Console.WriteLine(e.Message);
                     Console.WriteLine(e.StackTrace);
                 }
-                Console.WriteLine("Copy is done -- " + (DateTime.Now - startTime).TotalMilliseconds);
+                Console.WriteLine("Copy is done -- " + (DateTime.Now - cstartTime).TotalMilliseconds);
 
                 btnCopy.BeginInvoke(new MethodInvoker(delegate {
                     btnCopy.Enabled = true;
+                    btnCopy.Visible = true;
+                    prbLoadNCopy.Visible = false;
+                }));
+                lblProgress.BeginInvoke(new MethodInvoker(delegate {
+                    lblProgress.Text = "";
+                    lblProgress.Visible = false;
                 }));
 
+
+
+            });
+
+            Task.Factory.StartNew(() =>
+            {
+                for (;;)
+                {
+                    Thread.Sleep(100);
+                    if (Item.RootItemCount > 0 && (Item.RootItemCount > Item.LoadedItemCount))
+                    {
+                        prbLoadNCopy.BeginInvoke(new MethodInvoker(delegate
+                        {
+                            prbLoadNCopy.Value = (int)((Item.LoadedItemCount * 100) / Item.RootItemCount);
+                            lblProgress.Text = prbLoadNCopy.Value + "%";
+                        }));
+                    }
+                    else if (Item.LoadedImageCount > 0)
+                    {
+                        prbLoadNCopy.BeginInvoke(new MethodInvoker(delegate
+                        {
+                            prbLoadNCopy.Value = (int)((Item.CopiedImageCount * 100) / Item.LoadedImageCount);
+                            lblProgress.Text = prbLoadNCopy.Value + "%";
+                        }));
+                    }
+                }
             });
         }
 
@@ -213,5 +263,6 @@ namespace Backupfiles
 
 
         #endregion
+
     }
 }

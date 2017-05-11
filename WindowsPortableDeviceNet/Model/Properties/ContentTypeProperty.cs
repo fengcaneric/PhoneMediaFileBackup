@@ -67,5 +67,27 @@ namespace WindowsPortableDeviceNet.Model.Properties
                 Type = WindowsPortableDeviceEnumerators.ContentType.Unknown;
             }
         }
+
+        //public static WindowsPortableDeviceEnumerators.ContentType getContentType(string objectId, IPortableDeviceProperties properties)
+        //{
+        //    _tagpropertykey key = new PortableDeviceApiLib._tagpropertykey()
+        //    {
+        //        fmtid = new Guid("EF6B490D-5CD8-437A-AFFC-DA8B60EE4A3C"),
+        //        pid = 7,
+        //    };
+        //    IPortableDeviceValues currentContentType;
+        //    properties.GetPropertyAttributes(objectId, ref key, out currentContentType);
+        //    Guid g;
+        //    currentContentType.GetGuidValue(ref key, out g);
+        //    string value = g.ToString();
+        //    if (WpdContentTypeGuids.ContainsKey(value.ToUpper()))
+        //    {
+        //        return WpdContentTypeGuids[value.ToUpper()];
+        //    }
+        //    else
+        //    {
+        //        return WindowsPortableDeviceEnumerators.ContentType.Unknown;
+        //    }
+        //}
     }
 }
