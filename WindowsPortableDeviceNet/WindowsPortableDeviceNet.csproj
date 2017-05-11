@@ -55,6 +55,7 @@
     <Compile Include="Model\Properties\NameProperty.cs" />
     <Compile Include="Model\Properties\Device\FriendlyNameProperty.cs" />
     <Compile Include="Model\Properties\Device\SerialNumberProperty.cs" />
+    <Compile Include="Model\UtilityHelper.cs" />
     <Compile Include="Model\WindowsPortableDeviceEnumerators.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -162,9 +162,6 @@ namespace Backupfiles
                     lblProgress.Text = "";
                     lblProgress.Visible = false;
                 }));
-
-
-
             });
 
             Task.Factory.StartNew(() =>
@@ -172,19 +169,19 @@ namespace Backupfiles
                 for (;;)
                 {
                     Thread.Sleep(100);
-                    if (Item.RootItemCount > 0 && (Item.RootItemCount > Item.LoadedItemCount))
+                    if (UtilityHelper.RootItemCount > 0 && (UtilityHelper.RootItemCount > UtilityHelper.LoadedItemCount))
                     {
                         prbLoadNCopy.BeginInvoke(new MethodInvoker(delegate
                         {
-                            prbLoadNCopy.Value = (int)((Item.LoadedItemCount * 100) / Item.RootItemCount);
+                            prbLoadNCopy.Value = (int)((UtilityHelper.LoadedItemCount * 100) / UtilityHelper.RootItemCount);
                             lblProgress.Text = prbLoadNCopy.Value + "%";
                         }));
                     }
-                    else if (Item.LoadedImageCount > 0)
+                    else if (UtilityHelper.LoadedFileCount > 0)
                     {
                         prbLoadNCopy.BeginInvoke(new MethodInvoker(delegate
                         {
-                            prbLoadNCopy.Value = (int)((Item.CopiedImageCount * 100) / Item.LoadedImageCount);
+                            prbLoadNCopy.Value = (int)((UtilityHelper.CopiedFileCount * 100) / UtilityHelper.LoadedFileCount);
                             lblProgress.Text = prbLoadNCopy.Value + "%";
                         }));
                     }

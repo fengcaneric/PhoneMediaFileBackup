@@ -18,8 +18,6 @@ namespace WindowsPortableDeviceNet.Model
 
         static int array_length = (int)Math.Pow(2, 19);
         const int MAX_THREAD_COUNT = 1;
-        public static int RootItemCount = 0;
-        public static int LoadedItemCount = 0;
 
         public Item(string objectId, IPortableDeviceContent content)
             : base(objectId)
@@ -66,21 +64,21 @@ namespace WindowsPortableDeviceNet.Model
             }
         }
 
-        private static void GetItemCount(string parentID, IPortableDeviceContent content)
+        private void GetDeviceItemCount(string parentID, IPortableDeviceContent content)
         {
             IEnumPortableDeviceObjectIDs objectIds;
             content.EnumObjects(0, parentID, null, out objectIds);
             uint fe = 9999;
             string ob;
 
-            RootItemCount = 0;
+            UtilityHelper.RootItemCount = 0;
             for (; fe > 0;)
             {
                 fe = 9999;
                 objectIds.Next(1, out ob, ref fe);
-                RootItemCount++;
+                UtilityHelper.RootItemCount++;
             }
-            RootItemCount--;
+            UtilityHelper.RootItemCount--;
 
         }
 
@@ -92,10 +90,9 @@ namespace WindowsPortableDeviceNet.Model
             content.EnumObjects(0, Id, null, out objectIds);
 
             //Get total item count, it is for progress.
-            GetItemCount(Id, content);
+            GetDeviceItemCount(Id, content);
 
-            LoadedItemCount = 0;
-            LoadedImageCount = 0;
+            UtilityHelper.Initial();
 
             // Cycle through each device item and add it to the device items list.
             int fCount = 0;
@@ -112,7 +109,7 @@ namespace WindowsPortableDeviceNet.Model
                 {
                     fCount++;
                     Console.WriteLine("Folder count: " + fCount);
-                    while(tList.Count >= MAX_THREAD_COUNT)
+                    while(UtilityHelper.threadList.Count >= MAX_THREAD_COUNT)
                     {
                         Thread.Sleep(200);
                         Console.WriteLine("Sleep -- fCount is " + fCount);
@@ -121,7 +118,7 @@ namespace WindowsPortableDeviceNet.Model
                     int fNumber = fCount;
                     Task t = new Task(() => GetItemsByThread(objectId, content, fNumber));
                     t.Start();
-                    tList.Add(t);
+                    UtilityHelper.threadList.Add(t);
                 }
             }
         }
@@ -144,18 +141,18 @@ namespace WindowsPortableDeviceNet.Model
 
             RemoveCurrentTask();
 
-            LoadedItemCount++;
-            Console.WriteLine("Folder:" + fNumber + " " + i.Name.Value +" -- " + (DateTime.Now - startTime).TotalMilliseconds + " -- Task Count: " + tList.Count);
+            UtilityHelper.LoadedItemCount++;
+            Console.WriteLine("Folder:" + fNumber + " " + i.Name.Value +" -- " + (DateTime.Now - startTime).TotalMilliseconds + " -- Task Count: " + UtilityHelper.threadList.Count);
         }
 
         private void RemoveCurrentTask()
         {
-            Task currentTask = tList.Find(tl => tl.Id == Task.CurrentId);
+            Task currentTask = UtilityHelper.threadList.Find(tl => tl.Id == Task.CurrentId);
             if (currentTask != null)
             {
-                lock (tList)
+                lock (UtilityHelper.threadList)
                 {
-                    tList.Remove(currentTask);
+                    UtilityHelper.threadList.Remove(currentTask);
                 }
             }
         }
@@ -191,8 +188,8 @@ namespace WindowsPortableDeviceNet.Model
                     {
                         Console.WriteLine("Start Task: copy " + OriginalFileName.Value);
                         TransferFile(destinationPath);
-                        CopiedImageCount++;
-                        Console.WriteLine("Copy files " + CopiedImageCount);
+                        UtilityHelper.CopiedFileCount++;
+                        Console.WriteLine("Copy files " + UtilityHelper.CopiedFileCount);
                     }
                     break;
             }

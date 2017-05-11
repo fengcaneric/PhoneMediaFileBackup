@@ -60,7 +60,7 @@ namespace WindowsPortableDeviceNet.Model
                 do
                 {
                     System.Threading.Thread.Sleep(100);
-                } while (tList.Count > 0);
+                } while (UtilityHelper.threadList.Count > 0);
             }
             Disconnect();
         }
@@ -94,7 +94,6 @@ namespace WindowsPortableDeviceNet.Model
         /// <param name="isKeepFolderStructure"></param>
         public void TransferData(string destinationPath, bool isKeepFolderStructure)
         {
-            CopiedImageCount = 0;
             try
             {
                 Connect();
