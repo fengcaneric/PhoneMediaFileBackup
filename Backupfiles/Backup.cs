@@ -117,6 +117,8 @@ namespace Backupfiles
                 return;
             }
 
+            setLoadFolderList();
+
             string selectValue = cmbDriverList.SelectedValue.ToString();
             btnCopy.Enabled = false;
             btnCopy.Visible = false;
@@ -153,15 +155,7 @@ namespace Backupfiles
                 }
                 Console.WriteLine("Copy is done -- " + (DateTime.Now - cstartTime).TotalMilliseconds);
 
-                btnCopy.BeginInvoke(new MethodInvoker(delegate {
-                    btnCopy.Enabled = true;
-                    btnCopy.Visible = true;
-                    prbLoadNCopy.Visible = false;
-                }));
-                lblProgress.BeginInvoke(new MethodInvoker(delegate {
-                    lblProgress.Text = "";
-                    lblProgress.Visible = false;
-                }));
+                finishedCopy(destinationPath);
             });
 
             Task.Factory.StartNew(() =>
@@ -189,6 +183,36 @@ namespace Backupfiles
             });
         }
 
+        private void finishedCopy(string destinationPath)
+        {
+            btnCopy.BeginInvoke(new MethodInvoker(delegate {
+                btnCopy.Enabled = true;
+                btnCopy.Visible = true;
+                prbLoadNCopy.Visible = false;
+            }));
+            lblProgress.BeginInvoke(new MethodInvoker(delegate {
+                lblProgress.Text = "";
+                lblProgress.Visible = false;
+            }));
+
+            MessageBox.Show("备份已经完成！请在“" + destinationPath + "”找到你的文件。");
+        }
+
+        private void setLoadFolderList()
+        {
+            if (this.rdbMediaFolder.Checked == true)
+            {
+                Item.LoadFolders.Add("DCIM");
+                Item.LoadFolders.Add("PICTURES");
+                //Item.LoadFolders.Add("TENCENT");
+                Item.LoadFolders.Add("MOVIES");
+                Item.LoadFolders.Add("MUSIC");
+            }
+            else
+            {
+                Item.LoadFolders = new List<string>();
+            }
+        }
 
         //private void bindMTPList()
         //{
@@ -261,5 +285,18 @@ namespace Backupfiles
 
         #endregion
 
+        private void btnCollect_Click(object sender, EventArgs e)
+        {
+            if (this.btnCollect.Text.Equals("︾"))
+            {
+                this.btnCollect.Text = "︽";
+                this.Height = 400;
+            }
+            else
+            {
+                this.btnCollect.Text = "︾";
+                this.Height = 230;
+            }
+        }
     }
 }

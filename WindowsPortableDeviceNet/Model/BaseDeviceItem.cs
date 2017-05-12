@@ -19,11 +19,6 @@ namespace WindowsPortableDeviceNet.Model
             DeviceItems = new List<Item>();
         }
 
-        static BaseDeviceItem()
-        {
-            UtilityHelper.threadList = new List<Task>();
-        }
-
         /// <summary>
         /// This method enumerates/cycles through sub objects within this current object.
         /// </summary>

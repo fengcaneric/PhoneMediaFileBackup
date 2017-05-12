@@ -5,11 +5,14 @@ using PortableDeviceApiLib;
 using WindowsPortableDeviceNet.Model.Properties;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace WindowsPortableDeviceNet.Model
 {
     public class Item : BaseDeviceItem
     {
+        public static List<string> LoadFolders = new List<string>();
+
         public ContentTypeProperty ContentType { get; set; }
         public NameProperty Name { get; set; }
         public OriginalFileNameProperty OriginalFileName { get; set; }
@@ -85,14 +88,14 @@ namespace WindowsPortableDeviceNet.Model
         #region Load items by thread
         private void LoadDeviceItemsByThread(IPortableDeviceContent content)
         {
+            UtilityHelper.Initial();
+
             // Enumerate the items contained by the current object
             IEnumPortableDeviceObjectIDs objectIds;
             content.EnumObjects(0, Id, null, out objectIds);
 
             //Get total item count, it is for progress.
             GetDeviceItemCount(Id, content);
-
-            UtilityHelper.Initial();
 
             // Cycle through each device item and add it to the device items list.
             int fCount = 0;
@@ -109,7 +112,13 @@ namespace WindowsPortableDeviceNet.Model
                 {
                     fCount++;
                     Console.WriteLine("Folder count: " + fCount);
-                    while(UtilityHelper.threadList.Count >= MAX_THREAD_COUNT)
+                    if (IsInFolderList(objectId, content) == false)
+                    {
+                        UtilityHelper.LoadedItemCount++;
+                        continue;
+                    }
+
+                    while (UtilityHelper.threadList.Count >= MAX_THREAD_COUNT)
                     {
                         Thread.Sleep(200);
                         Console.WriteLine("Sleep -- fCount is " + fCount);
@@ -155,6 +164,32 @@ namespace WindowsPortableDeviceNet.Model
                     UtilityHelper.threadList.Remove(currentTask);
                 }
             }
+        }
+
+        private bool IsInFolderList(string objectId, IPortableDeviceContent content)
+        {
+            bool result = false;
+
+            DeviceContent = content;
+
+            IPortableDeviceProperties properties;
+            content.Properties(out properties);
+
+            IPortableDeviceKeyCollection keys;
+            properties.GetSupportedProperties(objectId, out keys);
+
+            IPortableDeviceValues values;
+            properties.GetValues(objectId, keys, out values);
+
+            var theContentType = new ContentTypeProperty(values);
+            var theName = new NameProperty(values);
+
+            if (LoadFolders.Count == 0 || LoadFolders.Contains(theName.Value.ToUpper()))
+            {
+                result = true;
+            }
+
+            return result;
         }
         #endregion
 

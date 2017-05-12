@@ -35,6 +35,11 @@
             this.lblProgress = new System.Windows.Forms.Label();
             this.txtSavePath = new System.Windows.Forms.TextBox();
             this.fbdPath = new System.Windows.Forms.FolderBrowserDialog();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdbAllFolders = new System.Windows.Forms.RadioButton();
+            this.rdbMediaFolder = new System.Windows.Forms.RadioButton();
+            this.btnCollect = new System.Windows.Forms.Button();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmbDriverList
@@ -50,7 +55,7 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnRefresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.btnRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnRefresh.Location = new System.Drawing.Point(10, 22);
             this.btnRefresh.Name = "btnRefresh";
@@ -64,9 +69,9 @@
             // 
             this.btnCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.btnCopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnCopy.Location = new System.Drawing.Point(10, 120);
+            this.btnCopy.Location = new System.Drawing.Point(10, 76);
             this.btnCopy.Name = "btnCopy";
-            this.btnCopy.Size = new System.Drawing.Size(558, 63);
+            this.btnCopy.Size = new System.Drawing.Size(560, 63);
             this.btnCopy.TabIndex = 2;
             this.btnCopy.Text = "备份文件";
             this.btnCopy.UseVisualStyleBackColor = false;
@@ -74,9 +79,9 @@
             // 
             // prbLoadNCopy
             // 
-            this.prbLoadNCopy.Location = new System.Drawing.Point(10, 120);
+            this.prbLoadNCopy.Location = new System.Drawing.Point(70, 76);
             this.prbLoadNCopy.Name = "prbLoadNCopy";
-            this.prbLoadNCopy.Size = new System.Drawing.Size(558, 63);
+            this.prbLoadNCopy.Size = new System.Drawing.Size(500, 63);
             this.prbLoadNCopy.TabIndex = 3;
             this.prbLoadNCopy.Visible = false;
             // 
@@ -85,18 +90,18 @@
             this.lblProgress.AutoSize = true;
             this.lblProgress.BackColor = System.Drawing.Color.Transparent;
             this.lblProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblProgress.Location = new System.Drawing.Point(12, 186);
+            this.lblProgress.Location = new System.Drawing.Point(12, 98);
             this.lblProgress.Name = "lblProgress";
-            this.lblProgress.Size = new System.Drawing.Size(30, 25);
+            this.lblProgress.Size = new System.Drawing.Size(41, 25);
             this.lblProgress.TabIndex = 4;
-            this.lblProgress.Text = "%";
+            this.lblProgress.Text = "0%";
             this.lblProgress.Visible = false;
             // 
             // txtSavePath
             // 
             this.txtSavePath.BackColor = System.Drawing.Color.White;
             this.txtSavePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtSavePath.Location = new System.Drawing.Point(10, 75);
+            this.txtSavePath.Location = new System.Drawing.Point(12, 316);
             this.txtSavePath.Name = "txtSavePath";
             this.txtSavePath.ReadOnly = true;
             this.txtSavePath.Size = new System.Drawing.Size(555, 30);
@@ -108,12 +113,62 @@
             this.fbdPath.RootFolder = System.Environment.SpecialFolder.MyComputer;
             this.fbdPath.SelectedPath = "D:\\我的图片";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.rdbAllFolders);
+            this.groupBox1.Controls.Add(this.rdbMediaFolder);
+            this.groupBox1.Location = new System.Drawing.Point(12, 191);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(558, 106);
+            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
+            // 
+            // rdbAllFolders
+            // 
+            this.rdbAllFolders.AutoSize = true;
+            this.rdbAllFolders.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.rdbAllFolders.Location = new System.Drawing.Point(16, 68);
+            this.rdbAllFolders.Name = "rdbAllFolders";
+            this.rdbAllFolders.Size = new System.Drawing.Size(130, 29);
+            this.rdbAllFolders.TabIndex = 0;
+            this.rdbAllFolders.Text = "所有文件夹";
+            this.rdbAllFolders.UseVisualStyleBackColor = true;
+            // 
+            // rdbMediaFolder
+            // 
+            this.rdbMediaFolder.AutoSize = true;
+            this.rdbMediaFolder.Checked = true;
+            this.rdbMediaFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.rdbMediaFolder.Location = new System.Drawing.Point(16, 21);
+            this.rdbMediaFolder.Name = "rdbMediaFolder";
+            this.rdbMediaFolder.Size = new System.Drawing.Size(170, 29);
+            this.rdbMediaFolder.TabIndex = 0;
+            this.rdbMediaFolder.TabStop = true;
+            this.rdbMediaFolder.Text = "仅常用照片目录";
+            this.rdbMediaFolder.UseVisualStyleBackColor = true;
+            // 
+            // btnCollect
+            // 
+            this.btnCollect.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btnCollect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCollect.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnCollect.Location = new System.Drawing.Point(10, 149);
+            this.btnCollect.Margin = new System.Windows.Forms.Padding(0);
+            this.btnCollect.Name = "btnCollect";
+            this.btnCollect.Size = new System.Drawing.Size(27, 32);
+            this.btnCollect.TabIndex = 7;
+            this.btnCollect.Text = "︾";
+            this.btnCollect.UseVisualStyleBackColor = true;
+            this.btnCollect.Click += new System.EventHandler(this.btnCollect_Click);
+            // 
             // Backup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.ClientSize = new System.Drawing.Size(581, 215);
+            this.ClientSize = new System.Drawing.Size(581, 191);
+            this.Controls.Add(this.btnCollect);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.txtSavePath);
             this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.btnCopy);
@@ -123,9 +178,10 @@
             this.MaximizeBox = false;
             this.Name = "Backup";
             this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.Text = "备份文件";
             this.Load += new System.EventHandler(this.Backup_Load);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -140,6 +196,10 @@
         private System.Windows.Forms.Label lblProgress;
         private System.Windows.Forms.TextBox txtSavePath;
         private System.Windows.Forms.FolderBrowserDialog fbdPath;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton rdbAllFolders;
+        private System.Windows.Forms.RadioButton rdbMediaFolder;
+        private System.Windows.Forms.Button btnCollect;
     }
 }
 
