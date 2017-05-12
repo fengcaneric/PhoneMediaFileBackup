@@ -2,3 +2,5 @@
 /Backupfiles/obj
 /WindowsPortableDeviceNet/obj
 /WindowsPortableDeviceNet/bin
+*.vsp
+*.vspx
