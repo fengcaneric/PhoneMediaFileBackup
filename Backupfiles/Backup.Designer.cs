@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.cmbDriverList = new System.Windows.Forms.ComboBox();
-            this.btnRefresh = new System.Windows.Forms.Button();
             this.btnCopy = new System.Windows.Forms.Button();
             this.prbLoadNCopy = new System.Windows.Forms.ProgressBar();
             this.lblProgress = new System.Windows.Forms.Label();
@@ -39,6 +38,7 @@
             this.rdbAllFolders = new System.Windows.Forms.RadioButton();
             this.rdbMediaFolder = new System.Windows.Forms.RadioButton();
             this.btnCollect = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,30 +46,22 @@
             // 
             this.cmbDriverList.BackColor = System.Drawing.Color.White;
             this.cmbDriverList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDriverList.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.cmbDriverList.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cmbDriverList.FormattingEnabled = true;
-            this.cmbDriverList.Location = new System.Drawing.Point(119, 22);
+            this.cmbDriverList.Location = new System.Drawing.Point(91, 22);
             this.cmbDriverList.Name = "cmbDriverList";
-            this.cmbDriverList.Size = new System.Drawing.Size(449, 37);
+            this.cmbDriverList.Size = new System.Drawing.Size(477, 37);
             this.cmbDriverList.TabIndex = 0;
-            // 
-            // btnRefresh
-            // 
-            this.btnRefresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.btnRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnRefresh.Location = new System.Drawing.Point(10, 22);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(103, 37);
-            this.btnRefresh.TabIndex = 1;
-            this.btnRefresh.Text = "刷新列表";
-            this.btnRefresh.UseVisualStyleBackColor = false;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // btnCopy
             // 
-            this.btnCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.btnCopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btnCopy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnCopy.ForeColor = System.Drawing.Color.White;
             this.btnCopy.Location = new System.Drawing.Point(10, 76);
+            this.btnCopy.Margin = new System.Windows.Forms.Padding(0);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(560, 63);
             this.btnCopy.TabIndex = 2;
@@ -161,6 +153,23 @@
             this.btnCollect.UseVisualStyleBackColor = true;
             this.btnCollect.Click += new System.EventHandler(this.btnCollect_Click);
             // 
+            // btnRefresh
+            // 
+            this.btnRefresh.BackColor = System.Drawing.Color.Transparent;
+            this.btnRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnRefresh.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btnRefresh.FlatAppearance.BorderSize = 0;
+            this.btnRefresh.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnRefresh.Image = global::Backupfiles.Properties.Resources.refresh;
+            this.btnRefresh.Location = new System.Drawing.Point(10, 22);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(43, 37);
+            this.btnRefresh.TabIndex = 1;
+            this.btnRefresh.UseVisualStyleBackColor = false;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
             // Backup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -170,11 +179,11 @@
             this.Controls.Add(this.btnCollect);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.txtSavePath);
-            this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.btnCopy);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.cmbDriverList);
             this.Controls.Add(this.prbLoadNCopy);
+            this.Controls.Add(this.lblProgress);
             this.MaximizeBox = false;
             this.Name = "Backup";
             this.ShowIcon = false;

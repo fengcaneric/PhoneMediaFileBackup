@@ -84,7 +84,7 @@ namespace Backupfiles
             Dictionary<string, string> ds = new Dictionary<string, string>();
             foreach(Device d in dList)
             {
-                ds.Add(d.DeviceId, d.Name.Value);
+                ds.Add(d.DeviceId, "手机：" + d.Name.Value);
             }
 
             if (cmbDriverList.InvokeRequired)
@@ -202,9 +202,10 @@ namespace Backupfiles
         {
             if (this.rdbMediaFolder.Checked == true)
             {
+                
                 Item.LoadFolders.Add("DCIM");
                 Item.LoadFolders.Add("PICTURES");
-                //Item.LoadFolders.Add("TENCENT");
+                Item.LoadFolders.Add("TENCENT");
                 Item.LoadFolders.Add("MOVIES");
                 Item.LoadFolders.Add("MUSIC");
             }
